@@ -1,6 +1,6 @@
 package com.davilav.wigilabstest.data.model
 
-data class Movie(
+data class MovieModel(
     val adult: Boolean,
     val backdropPath: String,
     val id: Int,

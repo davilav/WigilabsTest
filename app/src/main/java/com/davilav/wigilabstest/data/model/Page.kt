@@ -4,5 +4,5 @@ data class Page(
     val page: Int,
     val totalPages: Int,
     val totalResults: Int,
-    val results: List<Movie>?
+    val results: List<MovieModel>?
 )

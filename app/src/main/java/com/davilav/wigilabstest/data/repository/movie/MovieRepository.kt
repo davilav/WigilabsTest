@@ -1,12 +1,18 @@
 package com.davilav.wigilabstest.data.repository.movie
 
+import com.davilav.wigilabstest.data.Result
+import com.davilav.wigilabstest.data.local.db.movie.Movie
 import com.davilav.wigilabstest.data.model.ErrorResponse
-import com.davilav.wigilabstest.data.model.Movie
+import com.davilav.wigilabstest.data.model.Page
 import com.davilav.wigilabstest.data.remote.calladapter.NetworkResponse
 
 interface MovieRepository {
     suspend fun getMovie(
         api_key: String,
         language: String
-    ): NetworkResponse<List<Movie>, ErrorResponse>
+    ): NetworkResponse<Page, ErrorResponse>
+
+    suspend fun getMoviesDB(): Result<Any>
+    suspend fun compareMovies(movie: Movie)
+    suspend fun insertMovies(movie: Movie)
 }

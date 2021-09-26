@@ -1,5 +1,6 @@
 package com.davilav.wigilabstest.data.local.db
 
+import androidx.room.TypeConverter
 import java.util.*
 
 class Converters {
