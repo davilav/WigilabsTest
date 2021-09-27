@@ -1,19 +1,15 @@
 package com.davilav.wigilabstest.di
 
 import android.app.Application
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.davilav.wigilabstest.data.local.SharedPreferenceHelper
 import com.davilav.wigilabstest.data.local.db.LocalDataBase
 import com.davilav.wigilabstest.utils.Constants
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val localModule = module {
-    single { SharedPreferenceHelper(androidApplication()) }
     single { provideRoom(androidApplication()) }
 }
 

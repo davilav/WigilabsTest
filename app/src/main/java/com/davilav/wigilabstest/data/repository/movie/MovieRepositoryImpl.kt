@@ -23,7 +23,7 @@ class MovieRepositoryImpl(
             Result.error("Error")
         }
     }
-    TODO("Hacer la lógica que permita ingresar peliculas que no se hayan ingresado antes"
+
     override suspend fun compareMovies(movie: Movie) {
         val data = database.getMovieDao().getMovie()
         if (data.isEmpty() || !data.contains(movie)) {

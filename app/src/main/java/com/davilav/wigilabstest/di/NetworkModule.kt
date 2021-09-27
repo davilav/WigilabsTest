@@ -1,6 +1,8 @@
 package com.davilav.wigilabstest.di
 
+import com.davilav.wigilabstest.BuildConfig
 import com.davilav.wigilabstest.data.remote.ApiInterface
+import com.davilav.wigilabstest.data.remote.calladapter.NetworkResponseAdapterFactory
 import com.davilav.wigilabstest.utils.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,7 +34,7 @@ fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient = OkH
 fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .client(TrustAllCertificatesSSL.getUnsafeOkHttpClient())
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(NetworkResponseAdapterFactory())
         .build()

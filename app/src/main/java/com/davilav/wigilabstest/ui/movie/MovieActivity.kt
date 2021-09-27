@@ -11,7 +11,6 @@ import com.davilav.wigilabstest.databinding.ActivityMovieBinding
 import com.davilav.wigilabstest.ui.adapter.MovieAdapter
 import com.davilav.wigilabstest.ui.dialog.CustomAlertDialog
 import com.davilav.wigilabstest.utils.Constants
-import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieActivity : AppCompatActivity() {
@@ -29,6 +28,7 @@ class MovieActivity : AppCompatActivity() {
         intent?.let {
             movies = it.getSerializableExtra(MOVIE_KEY) as MovieModel?
         }
+        viewModel.getMovie()
         setupRecyclerView()
         setUpClickListener()
         setUpObserver()
@@ -71,9 +71,6 @@ class MovieActivity : AppCompatActivity() {
     }
 
     private fun setUpClickListener() {
-        TODO("Hacer la lógica de los listeners")
-
-
         binding.tvTitle.setOnClickListener {
             binding.tvTitle.text = "Es-es"
         }

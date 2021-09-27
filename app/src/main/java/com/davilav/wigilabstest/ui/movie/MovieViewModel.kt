@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.davilav.wigilabstest.data.remote.calladapter.NetworkResponse
-import com.davilav.wigilabstest.data.repository.movie.MovieRepositoryImpl
+import com.davilav.wigilabstest.data.repository.movie.MovieRepository
 import com.davilav.wigilabstest.utils.Constants
 import com.davilav.wigilabstest.utils.SingleLiveEvent
 import com.davilav.wigilabstest.utils.Singleton
@@ -19,7 +19,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class MovieViewModel(
-    private val repository: MovieRepositoryImpl
+    private val repository: MovieRepository
 ) : ViewModel() {
 
     private val _dataResponseOnline: MutableLiveData<Pair<Boolean, Any?>> = MutableLiveData()
@@ -31,7 +31,7 @@ class MovieViewModel(
 
     private fun getApiKey(): String = Constants.API_KEY
 
-    private fun getLanguage(): String = TODO("Hacer la lógica que permita capturar el lenguaje que eligio el usuario para que se vuelva a consumir la api")
+    private fun getLanguage(): String = "en-US"
 
     fun getMovie() {
         viewModelScope.launch {

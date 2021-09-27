@@ -39,7 +39,6 @@ class MovieAdapter(
             binding.tvMovieTitle.text = data.originalTitle
             binding.tvOverview.text = data.overview
             //binding.ivPoster
-            TODO("Hacer que se muestre la portada")
         }
     }
 }

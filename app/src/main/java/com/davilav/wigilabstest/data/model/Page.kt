@@ -2,7 +2,7 @@ package com.davilav.wigilabstest.data.model
 
 data class Page(
     val page: Int,
-    val totalPages: Int,
-    val totalResults: Int,
+    val total_pages: Int,
+    val total_results: Int,
     val results: List<MovieModel>?
 )
