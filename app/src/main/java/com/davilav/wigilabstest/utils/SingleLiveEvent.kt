@@ -18,7 +18,6 @@ open class SingleLiveEvent<T> : MutableLiveData<T>() {
         })
     }
 
-
     @MainThread
     override fun setValue(t: T?) {
         mPending.set(true)

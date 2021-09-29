@@ -1,12 +1,20 @@
 package com.davilav.wigilabstest.data.repository.movie
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.davilav.wigilabstest.data.Result
 import com.davilav.wigilabstest.data.local.db.LocalDataBase
 import com.davilav.wigilabstest.data.local.db.movie.Movie
 import com.davilav.wigilabstest.data.model.ErrorResponse
+import com.davilav.wigilabstest.data.model.MovieModel
 import com.davilav.wigilabstest.data.model.Page
 import com.davilav.wigilabstest.data.remote.ApiInterface
 import com.davilav.wigilabstest.data.remote.calladapter.NetworkResponse
+import com.davilav.wigilabstest.utils.Constants
+import com.squareup.picasso.Picasso
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MovieRepositoryImpl(
     private val apiClient: ApiInterface,
@@ -34,4 +42,32 @@ class MovieRepositoryImpl(
     override suspend fun insertMovies(movie: Movie) {
         database.getMovieDao().insertMovie(movie)
     }
+
+    override suspend fun getMoviesPhotos(movies: List<MovieModel>?): Result<Any> {
+        val list: MutableList<Bitmap> = ArrayList()
+        movies?.forEach { movie ->
+            try {
+            val url = URL(Constants.BASE_IMAGE_URL+movie.poster_path)
+            val connection =
+                url.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+            val input = connection.inputStream
+           list.add(BitmapFactory.decodeStream(input))
+        } catch (e: IOException) {
+            null
+        }
+      }
+        return if (list.isNotEmpty()){
+            for (i in list.indices) {
+                movies?.get(i)!!.poster_img  = list[i]
+            }
+            Result.success(movies)
+        }
+        else{
+            Result.error("Error")
+        }
+
+    }
+
 }

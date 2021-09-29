@@ -5,4 +5,6 @@
     <string name="network_connection_message">We invite you to save your movies so that you can view the information without an internet connection </string>
     <string name="try_again_button">Retry Again</string>
     <string name="exit_button">Exit</string>
+    <string name="spanish">es-Es</string>
+    <string name="english">en-US</string>
 </resources>

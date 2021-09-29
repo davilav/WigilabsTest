@@ -3,8 +3,12 @@ package com.davilav.wigilabstest.ui.dialog
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.davilav.wigilabstest.R
 
 class CustomAlertDialog : DialogFragment() {
 
@@ -24,6 +28,13 @@ class CustomAlertDialog : DialogFragment() {
             positiveButtonDialog = it.getString(POSITIVE_BUTTON_DIALOG)
             negativeButtonDialog = it.getString(NEGATIVE_BUTTON_DIALOG)
         }
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.film_layout_dialog, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

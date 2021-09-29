@@ -3,7 +3,6 @@ package com.davilav.wigilabstest.ui.movie
 import com.davilav.wigilabstest.data.Result
 import android.content.Context
 import android.net.ConnectivityManager
-import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,6 +16,12 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
+import android.os.AsyncTask
+import com.davilav.wigilabstest.data.local.db.movie.Movie
+import kotlinx.coroutines.Dispatchers
+import com.davilav.wigilabstest.data.model.MovieModel
+import com.davilav.wigilabstest.utils.RoundCornersBitmap
+
 
 class MovieViewModel(
     private val repository: MovieRepository
@@ -31,15 +36,51 @@ class MovieViewModel(
 
     private fun getApiKey(): String = Constants.API_KEY
 
-    private fun getLanguage(): String = "en-US"
-
-    fun getMovie() {
+    fun getMovie(language: String, context: Context) {
         viewModelScope.launch {
-            when (val result = repository.getMovie(getApiKey(), getLanguage())) {
-                is NetworkResponse.Success -> {
-                    _dataResponse.value = MovieState.MovieSuccess(result.body.results)
+            if (hasNetworkAvailable(context)) {
+                when (val result = repository.getMovie(getApiKey(), language)) {
+                    is NetworkResponse.Success -> {
+                        getPhotos(result.body.results)
+                    }
+
+                    else -> _dataResponse.value = MovieState.MovieFailure
                 }
-                else -> _dataResponse.value = MovieState.MovieFailure
+            } else {
+                _dataResponse.value = MovieState.MovieFailure
+            }
+        }
+    }
+
+    fun downloadMovie(movie: Movie, context: Context) {
+        viewModelScope.launch {
+            if (hasNetworkAvailable(context)) {
+                repository.insertMovies(movie)
+            } else {
+                getMovieOffline()
+            }
+        }
+    }
+
+
+    private fun getPhotos(movies: List<MovieModel>?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getMoviesPhotos(movies)
+            when (response.status) {
+                Result.Status.SUCCESS -> {
+                    val success = response.data as List<MovieModel>
+                    success.forEach { movies ->
+                        movies.poster_img = RoundCornersBitmap(
+                            movies.poster_img!!,
+                            50
+                        ).roundedCornerBitmap()
+                    }
+                    _dataResponse.postValue(MovieState.MovieSuccess(success))
+
+                }
+                Result.Status.ERROR -> {
+                    _dataResponse.value = MovieState.MovieFailure
+                }
             }
         }
     }
@@ -65,13 +106,13 @@ class MovieViewModel(
         return (network?.isConnected) ?: false
     }
 
-    fun isOnline(context: Context) {
+    fun isOnline(context: Context,server: String) {
         AsyncTask.execute {
             try {
                 if (hasNetworkAvailable(context)) {
                     try {
                         val connection =
-                            URL(Constants.REACHABILITY_SERVER).openConnection() as HttpURLConnection
+                            URL(server).openConnection() as HttpURLConnection
                         connection.setRequestProperty("User-Agent", "Test")
                         connection.setRequestProperty("Connection", "close")
                         connection.connectTimeout = 1500
